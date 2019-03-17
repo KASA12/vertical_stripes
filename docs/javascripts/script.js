@@ -1,11 +1,13 @@
 let pg = null;
 let particles = [];
+const HUE = 170;
+const SAT = 20;
 
 function setup() {
   createCanvas(600, 600);
   colorMode(HSB, 360, 100, 100, 100);
   frameRate(60);
-  background(140, 10, 10, 100);
+  background(HUE, SAT, 10, 100);
 
   mouseX = 60;
   mouseY = height * 2 / 3;
@@ -20,11 +22,11 @@ function setup() {
 }
 
 function draw() {
-
-  pg.background(0, 0, 0, 255);
   pg.colorMode(RGB, 255, 255, 255, 255);
+  pg.background(0, 0, 0, 255);
   pg.smooth();
 
+  //check
   const d = 100;
   for (let i = -width; i < width; i += d) {
     for (let j = -height; j < height; j += d) {
@@ -40,11 +42,26 @@ function draw() {
   //text
   pg.fill(255, 0, 0, 255);
   pg.stroke(255, 0, 0, 255);
-  pg.textSize(200);
+  pg.textSize(100);
   pg.textAlign(LEFT, BOTTOM);
   pg.textFont("Georgia");
   pg.strokeWeight(1);
-  pg.text("p5*js", mouseX, mouseY);
+  pg.text("VERTICAL", mouseX, mouseY - 70);
+  pg.text("STRIPES", mouseX, mouseY + 15);
+
+  //text2
+  pg.push();
+  pg.translate(mouseX, mouseY);
+  pg.rotate(PI);
+  pg.fill(0, 0, 255, 255);
+  pg.stroke(0, 0, 255, 255);
+  pg.textSize(100);
+  pg.textAlign(LEFT, BOTTOM);
+  pg.textFont("Georgia");
+  pg.strokeWeight(1);
+  pg.text("VERTICAL", 0, -70);
+  pg.text("STRIPES", 0, 15);
+  pg.pop();
 
   //frame
   pg.fill(255, 0, 0, 255);
@@ -63,7 +80,7 @@ function draw() {
   beginShape(POINTS);
   particles.forEach(p => {
     p.update();
-  })
+  });
   endShape();
 }
 
@@ -86,11 +103,13 @@ class Particle {
 
     strokeWeight(2);
     if (pg.get(this.x, this.y)[0] === 255) {
-      stroke(130, 10, 100, 100);
+      stroke(HUE, SAT, 100, 100);
     } else if (pg.get(this.x, this.y)[1] === 255) {
-      stroke(130, 10, 30, 100);
+      stroke(HUE, SAT, 30, 100);
+    } else if (pg.get(this.x, this.y)[2] === 255) {
+      stroke(HUE, SAT, 20, 100);
     } else {
-      stroke(130, 10, 10, 100);
+      stroke(HUE, SAT, 10, 100);
     }
 
     vertex(this.x, this.y);
